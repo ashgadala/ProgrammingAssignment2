@@ -9,7 +9,7 @@ makeCacheMatrix <- function(x = matrix()) {
   
   # Check if xis a metrix
   if (!is.matrix(x)) {
-    stop(" input should be a matrix, Choose matrix as input")
+    stop(" input should be a matrix, Choose matrix input")
   }
   
   inv.x <- NULL
@@ -36,10 +36,29 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## Write a short comment describing this function
-
+#If the inverse has already been calculated (and the matrix has not changed in the make cachematrix fuction, 
+#then the cachesolve will retrieve the inverse from the cache.
+#if not inverse is calcuated. 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-
+        
+  m <- x$get.inverse()
+  if(!is.null(m)) {
+    message("getting cached data - inversematrix")
+    
+  #Checking if the matrixs in the input is same  as the matrix in the cache
+    y <- solve(m)
+    matequal <- function(x, y)
+      is.matrix(x) && is.matrix(y) && dim(x) == dim(y) && all(x == y)
+    if (matequal(x, y)){
+    return(m)
+    }
+  }
+  #as no chache and matrix is not changed
+  #converting the matrix to inverse
   
+  data <- x$get()
+  ## Return a matrix that is the inverse of 'x'
+  m <- solve(data, ...)
+  x$setinverse(m)
+  m
   }
